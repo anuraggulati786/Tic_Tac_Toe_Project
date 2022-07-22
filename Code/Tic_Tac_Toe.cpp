@@ -228,7 +228,7 @@ void playTicTacToe(int whoseTurn)
 						}
 						else if(n<0 || n>8)
 						{
-								printf("Invalid position\n");
+								cout<<"Invalid position\n";
 						}
 		    }
     }
