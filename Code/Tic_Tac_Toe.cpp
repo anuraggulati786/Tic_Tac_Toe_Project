@@ -7,21 +7,23 @@ using namespace std;
 #define HUMANMOVE 'X'
 void showBoard(char board[][SIDE])
 {
-		printf("\t\t\t %c | %c | %c \n", board[0][0], board[0][1], board[0][2]);
-		printf("\t\t\t-----------\n");
-		printf("\t\t\t %c | %c | %c \n", board[1][0], board[1][1], board[1][2]);
-		printf("\t\t\t-----------\n");
-		printf("\t\t\t %c | %c | %c \n\n", board[2][0], board[2][1], board[2][2]);
+		cout<<"\t\t\t "<<board[0][0]<<" | " <<board[0][1]<<" | "<<board[0][2] <<"\n"; 
+		cout<<"\t\t\t-----------\n";
+		cout<<"\t\t\t "<<board[1][0]<<" | " <<board[1][1]<<" | "<<board[1][2] <<"\n";
+		cout<<"\t\t\t-----------\n";
+		cout<<"\t\t\t "<<board[2][0]<<" | " <<board[2][1]<<" | "<<board[2][2] <<"\n";
 }
+
 void showInstructions()
 {
-		printf("\nChoose a cell numbered from 1 to 9 as below and play\n\n");
-		printf("\t\t\t 1 | 2 | 3 \n");
-		printf("\t\t\t-----------\n");
-		printf("\t\t\t 4 | 5 | 6 \n");
-		printf("\t\t\t-----------\n");
-		printf("\t\t\t 7 | 8 | 9 \n\n");
+		cout<<"\nChoose a cell numbered from 1 to 9 as below and play\n\n";
+		cout<<"\t\t\t 1 | 2 | 3 \n";
+		cout<<"\t\t\t-----------\n";
+		cout<<"\t\t\t 4 | 5 | 6 \n";
+		cout<<"\t\t\t-----------\n";
+		cout<<"\t\t\t 7 | 8 | 9 \n\n";
 }
+
 void initialise(char board[][SIDE])
 {
 // Initially the board to '*' as said
@@ -31,6 +33,7 @@ void initialise(char board[][SIDE])
 		board[i][j] = '*';
 		}
 }
+
 void declareWinner(int whoseTurn)
 {
 		if (whoseTurn == COMPUTER)
@@ -38,13 +41,12 @@ void declareWinner(int whoseTurn)
 		else
 		printf("HUMAN has won\n");
 }
+
 bool rowCrossed(char board[][SIDE])
 {
 		for (int i=0; i<SIDE; i++)
 		{
-		if (board[i][0] == board[i][1] &&
-		board[i][1] == board[i][2] &&
-		board[i][0] != '*')
+		if (board[i][0] == board[i][1] && board[i][1] == board[i][2] && board[i][0] != '*')
 		return (true);
 		}
 		return(false);
@@ -53,89 +55,92 @@ bool columnCrossed(char board[][SIDE])
 {
 		for (int i=0; i<SIDE; i++)
 		{
-		if (board[0][i] == board[1][i] &&
-		board[1][i] == board[2][i] &&
-		board[0][i] != '*')
+		if (board[0][i] == board[1][i] && board[1][i] == board[2][i] && board[0][i] != '*')
 		return (true);
 		}
 		return(false);
 }
+
 bool diagonalCrossed(char board[][SIDE])
 {
-		if (board[0][0] == board[1][1] &&
-		board[1][1] == board[2][2] &&
-		board[0][0] != '*')
+		if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != '*')
 		return(true);
-		if (board[0][2] == board[1][1] &&board[1][1] == board[2][0] &&
-		board[0][2] != '*')
+		
+		if (board[0][2] == board[1][1] &&board[1][1] == board[2][0] && board[0][2] != '*')
 		return(true);
+		
 		return(false);
 }
+
+
 bool gameOver(char board[][SIDE])
 {
 		return(rowCrossed(board) || columnCrossed(board) || diagonalCrossed(board) );
 }
+
+
 int minimax(char board[][SIDE], int depth, bool isAI)
 {
 		int score = 0;
 		int bestScore = 0;
-		if (gameOver(board) == true)
-		{
+		
+	if (gameOver(board) == true)
+	{
 		if (isAI == true)
-		return -10;
+			return -10;
 		if (isAI == false)
-		return +10;
-		}
-		else
+			return +10;
+	}
+	else
 		{
 		if(depth < 9)
 		{
-		if(isAI == true)
+	if(isAI == true)
 		{
 		bestScore = -999;
 		for(int i=0; i<SIDE; i++)
 		{
-		for(int j=0; j<SIDE; j++)
-		{
-		if (board[i][j] == '*')
-		{
-		board[i][j] = COMPUTERMOVE;
-		score = minimax(board, depth + 1, false);
-		board[i][j] = '*';
-		if(score > bestScore)
-		{
-		bestScore = score;
-		}
-		}
-		}
+			for(int j=0; j<SIDE; j++)
+			{
+				if (board[i][j] == '*')
+				{
+					board[i][j] = COMPUTERMOVE;
+					score = minimax(board, depth + 1, false); // recursive call
+					board[i][j] = '*';
+					if(score > bestScore)
+					{
+						bestScore = score;
+					}
+				}
+			}
 		}
 		return bestScore;
-}
+	}
 else
 {
 		bestScore = 999;
 		for (int i = 0; i < SIDE; i++)
 		{
-		for (int j = 0; j < SIDE; j++)
-		{
-		if (board[i][j] == '*')
-		{
-		board[i][j] = HUMANMOVE;
-		score = minimax(board, depth + 1, true);
-		board[i][j] = '*';
-		if (score < bestScore)
-		{
-		bestScore = score;
-		}
-		}
-		}
+			for (int j = 0; j < SIDE; j++)
+			{
+				if (board[i][j] == '*')
+				{
+					board[i][j] = HUMANMOVE;
+					score = minimax(board, depth + 1, true); // recursive call 
+					board[i][j] = '*';
+					if (score < bestScore)
+					{
+						bestScore = score;
+					}
+				}
+			}
 		}
 		return bestScore;
-		}
+}
 		}
 		else
 		{
-		return 0;
+			return 0;
 		}
 		}
 }
@@ -149,7 +154,7 @@ int bestMove(char board[][SIDE], int moveIndex)
 			{
 				if (board[i][j] == '*')
 				{
-					board[i][j] = COMPUTERMOVE;
+					board[i][j] = COMPUTERMOVE; // mark as O
 					score = minimax(board, moveIndex+1, false);
 					board[i][j] = '*';
 					if(score > bestScore)
@@ -186,7 +191,7 @@ void playTicTacToe(int whoseTurn)
 
 				board[x][y] = COMPUTERMOVE;
 
-				printf ("COMPUTER has put a %c in cell %d\n\n", COMPUTERMOVE,n+1);
+				cout<<"COMPUTER has put a "<<COMPUTERMOVE<<" in cell "<<n+1<<" \n\n";
 
 				showBoard(board);
 
@@ -201,7 +206,9 @@ void playTicTacToe(int whoseTurn)
 				for(int i=0; i<SIDE; i++)
 					for (int j = 0; j < SIDE; j++)
 						if (board[i][j] == '*')
-							cout<<(i * 3 + j) + 1<<" ";
+							cout<<(i * 3 + j) + 1<<" "; ///+1 for zero based indexing ...
+
+
 							cout<<"\n\nEnter the position = ";
 								cin>>n;
 								n--;
@@ -210,7 +217,7 @@ void playTicTacToe(int whoseTurn)
 						if(board[x][y] == '*' && n<9 && n>=0)
 						{
 								board[x][y] = HUMANMOVE;
-								printf ("\nHUMAN has put a %c in cell %d\n\n", HUMANMOVE,n+1);
+								cout<<"\nHUMAN has put a "<<HUMANMOVE<<" in cell "<<n+1<<" \n\n";
 								showBoard(board);
 								moveIndex ++;
 								whoseTurn = COMPUTER;
@@ -227,15 +234,18 @@ void playTicTacToe(int whoseTurn)
     }
 
 if (gameOver(board) == false && moveIndex == SIDE * SIDE)
-printf("It's a draw\n");
+	cout<<"It's a draw\n";
 else
 {
-if (whoseTurn == COMPUTER)
-whoseTurn = HUMAN;
-else if (whoseTurn == HUMAN)
-whoseTurn = COMPUTER;
-declareWinner(whoseTurn);
+	if (whoseTurn == COMPUTER)
+	whoseTurn = HUMAN;
+
+	else if (whoseTurn == HUMAN)
+	whoseTurn = COMPUTER;
+
+	declareWinner(whoseTurn);
 }
+
 }
 
 
